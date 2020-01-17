@@ -1,0 +1,320 @@
+arbre_reader_data			# data in the csv file as a list
+list_annee				# column titled "ANNEEDEPLANTATION"
+list_annee_int				# column titled "ANNEEDEPLANTATION" without the title and without empty cells and with values as integers
+list_all				# list of rows
+maire_reader_data			# data in the maire csv file as a list
+
+
+----------
+
+
+# To open jupyter
+
+1. Go to any folder
+2. Right click and select 'open in terminal'
+3. type 'jupyter notebook'
+
+	# if '(base) conda' is not active, activate by typing 'conda activate base'
+		this opens a virtual environment which enables jupyter notebook to run
+
+
+-----------
+
+
+# When opening jutyper for the first time of the day
+import csv
+with open('/home/campus-5/Documents/Project_arbre 2019 01 16/0. Data/ESP_PUBLIC.IDENTITE_ARBRE.csv', newline='') as csvfile:
+    arbre_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    arbre_reader_data = list(arbre_reader)
+
+    list_annee = []
+    for row in arbre_reader_data:
+        list_annee.append(row[19])
+
+
+import csv
+with open('/home/campus-5/Documents/Project_arbre 2019 01 16/0. Data/Maire.csv', newline='') as csvfile_2:
+    maire_reader = csv.reader(csvfile_2)
+    maire_reader_data = list(maire_reader)    
+
+list_all = []
+
+for row in arbre_reader_data:
+    list_all.append(row)
+
+list_annee_int = []
+
+for elem in list_annee[1:]:
+    if not elem == '':
+        list_annee_int.append(elem)
+
+list_annee_int = [int(i) for i in list_annee_int]
+
+
+
+----------
+
+# To import the csv file
+
+import csv
+with open('/home/campus-5/Documents/Project_arbre 2019 01 16/0. Data/ESP_PUBLIC.IDENTITE_ARBRE.csv', newline='') as csvfile:
+    arbre_reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+    arbre_reader_data = list(arbre_reader)
+
+
+# To create a list containing the data in column "ANNEEDEPLANTATION"
+    list_annee = []
+    for row in arbre_reader:
+        list_annee.append(row[19])
+
+# To count empty cells in data
+g = 0
+for i in list_annee:
+    if i == '':
+        g += 1
+
+print(g)
+
+# To count empty cells in data (alternative)
+g = 0
+
+for n, i in enumerate(list_annee):
+    if i == '':
+        g += 1
+
+print(g)
+
+----------
+
+
+# To create a list of rows (list in list)
+list_all = []
+
+for row in arbre_reader_data:
+    list_all.append(row)
+
+print(len(list_all))
+print(list_all[1])
+
+----------
+
+Pour combien d’arbres manque-t-il l’information concernant la date de plantation ?
+30422
+(1392 cells without info on year)
+
+----------
+
+Combien d’arbres sont recensés dans ce jeu de données ?
+31814
+
+len(list_annee_cut)
+31814
+
+----------
+
+Combien d’arbres ont été plantés en moyenne chaque année ? 
+467.8529411764706
+
+# To convert elements in the list of strings to integers:
+
+list_annee_int = []
+
+for elem in list_annee:
+    if not (elem == '') or (elem == 'ANNEEDEPLANTATION'):
+        list_annee_int.append(elem)
+
+list_annee_int = [int(i) for i in list_annee_int]
+
+# To calculate the average number of tree planted per year:
+
+starting_year = min(list_annee_asce_int)
+end_year = max(list_annee_asce_int)
+
+average_trees_per_year = len(list_annee_asce_int) / (end_year - starting_year)
+
+print(average_trees_per_year)
+
+
+467.8529411764706
+
+----------
+
+Afficher tous les arbres ayant été plantés l’année de votre naissance. 
+409
+
+list_annee_asce_int.count(1990)
+
+----------
+
+Combien d’arbres ont été plantés depuis votre naissance ?
+12639
+
+counter = 0
+i = 1990
+
+for elem in list_annee_asce_int:
+    if elem > i:
+        counter += 1
+        
+print(counter)
+
+----------
+
+Quel Maire a planté le plus d’arbre à Grenoble ?	
+Hubert Dubedout
+(When you have imported the tree csv and major csv files as dictionaries)
+
+# To make a list containing the number of trees planted by each mayor
+list_tree_by_mayor =[]
+
+for myr in list_mayor_full:
+    start_year = myr['START']
+    end_year = myr['END']
+    first_name = myr['FIRST_NAME']
+    last_name = myr['LAST_NAME']
+        
+    counter = 0
+    for yr in list_tree_full:
+        if yr['ANNEEDEPLANTATION'] != '' and int(yr['ANNEEDEPLANTATION']) >= int(start_year) and int(yr['ANNEEDEPLANTATION']) <= int(end_year):
+            counter += 1
+    list_tree_by_mayor.extend([(first_name + ' ' + last_name), counter])
+    
+print(list_tree_by_mayor)
+
+
+#ALTERNATIVELY!!! - using dictionary:
+
+# To make a dictionary containing the number of trees planted by each mayor
+tree_by_mayor = {}
+
+for myr in list_mayor_full:
+    start_year = myr['START']
+    end_year = myr['END']
+    first_name = myr['FIRST_NAME']
+    last_name = myr['LAST_NAME']
+        
+    counter = 0
+    for yr in list_tree_full:
+        if yr['ANNEEDEPLANTATION'] != '' and int(yr['ANNEEDEPLANTATION']) >= int(start_year) and int(yr['ANNEEDEPLANTATION']) <= int(end_year):
+            counter += 1
+    tree_by_mayor[(first_name + ' ' + last_name)] = counter
+
+print(tree_by_mayor) # to see my new dictionary
+
+# To find the max value in my dictionary and return the key from the max-value
+
+tbm_list = []
+for i in tree_by_mayor:
+    tbm = tree_by_mayor[i]
+    tbm_list.append(tbm)
+
+for name, tree in tree_by_mayor.items():  
+    if tree == max(tbm_list):
+        print(name)
+
+
+
+Utilisez Matplotlib pour tracer l’histogramme représentant le nombre d’arbres
+plantés par année.
+(See .doc)
+
+# First, make a full list of 'year planted'
+
+list_year = []
+
+for yr in list_tree_full:
+    if yr['ANNEEDEPLANTATION'] != '':
+        list_year.append(int(yr['ANNEEDEPLANTATION']))
+
+# Then rearrange the list in ascending order
+
+list_year_asc = list_year 
+list_year_asc.sort()
+
+# Find the 'unique years' 
+
+list_year_asc_unq = []
+
+for x in list_year_asc:
+    if x not in list_year_asc_unq:
+        list_year_asc_unq.append(x)
+
+# Find the number of trees per year by counting how many times 'unique trees' appear in the full list ascending of year planted
+
+list_tree_p_year =[]
+
+for o in list_year_asc_unq:
+    counter = 0
+    for u in list_year_asc:
+        if o == u:
+            counter += 1
+    list_tree_p_year.append(counter)
+print(list_tree_p_year)
+
+# Import matplotlib and plot bar graph of trees per year and unique year
+
+import matplotlib.pyplot as plt
+
+y = list_tree_p_year
+x = list_year_asc_unq
+
+plt.bar(x, y)
+plt.show()
+
+
+# ALTERNATIVELY!!! - once you have an ascending order of planted year (without empty cells as integers)
+
+import matplotlib.pyplot as plt
+
+plt.hist(list_year_asc)
+plt.show()
+
+#OR! - to have a similar graph as the bar graph above
+
+import matplotlib.pyplot as plt
+
+plt.hist(list_year_asc,bins=list(range(1950, 2018)))
+plt.show()
+
+
+----------
+
+
+Récupérez maintenant l’information concernant le genre botanique et la
+stocker conjointement avec l’année de plantation dans un tuple. Les tuples
+seront stockés dans une liste.
+
+# Make 2 separate lists of years and genres
+
+list_year = []
+list_genre = []
+
+for yr in list_tree_full:
+    list_year.append(yr['ANNEEDEPLANTATION'])
+
+for gn in list_tree_full:
+    list_genre.append(gn['GENRE_BOTA'])
+
+# Create tuple using the merge of the 2 lists
+
+tuple_genus_year = tuple(list(zip(list_year, list_genre)))
+
+
+
+----------
+
+
+
+Pour combien d’arbre manque-t-il l’information concernant le genre
+botanique ?
+30750
+
+# Use a for loop with an if condition to count the second values in each item in the tuple if not empty
+
+counter = 0
+for x in tuple_genus_year:
+    if x[1] != '':
+        counter += 1
+print(counter)
+
+
